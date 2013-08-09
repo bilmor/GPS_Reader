@@ -42,21 +42,26 @@ void setup() {
 
   if (inputFilename != "")  // if user didn't cancel
   {
-
     trackLog = new ArrayList<TrackPoint>(10000);
 
     // read in previous data
-    inputData = loadStrings("datafileout.txt");
-    if (inputData != null)
+    File datafiletest = new File (dataPath("datafile"));
+    if (datafiletest.exists())
     {
-      for (int i=0; i<inputData.length; i++)  //  for each line in inputData
+      inputData = loadStrings("datafileout.txt"); //<>//
+      if (inputData != null)
       {
-        dataLine = split(inputData[i], "\t");
-        trackLog.add(new TrackPoint(dataLine[0], float(dataLine[1]), 
-        float(dataLine[2]), float(dataLine[3]), 
-        boolean(dataLine[4])));
+        for (int i=0; i<inputData.length; i++)  //  for each line in inputData
+        {
+          dataLine = split(inputData[i], "\t");
+          trackLog.add(new TrackPoint(dataLine[0], float(dataLine[1]), 
+          float(dataLine[2]), float(dataLine[3]), 
+          boolean(dataLine[4])));
+        }
       }
     }
+    else println ("no datafile");
+    
 
     // Load XML file
     gpxFile = loadXML(inputFilename);
@@ -86,7 +91,7 @@ void setup() {
         XML elevationElement = trackpoints[j].getChild("ele");
         float elevation = elevationElement.getFloatContent();
 
-        for (int k=0; k<=logLength; k++)
+        for (int k=0; k<=logLength; k++) //<>//
         {
           TrackPoint theTrackPoint = trackLog.get(k);
 
