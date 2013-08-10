@@ -1,4 +1,4 @@
-// GPS XML reader //<>//
+// GPS XML reader
 //   reads a .gpx XML file output from LoadMyTracks (http://www.loadmytracks.com/)
 // testing addition
 
@@ -46,9 +46,10 @@ void setup() {
 
     // read in previous data
     File datafiletest = new File (dataPath("datafile"));
-    if (datafiletest.exists())
+    Boolean datafileExists = datafiletest.exists();
+    if (datafileExists)
     {
-      inputData = loadStrings("datafileout.txt"); //<>//
+      inputData = loadStrings("datafileout.txt");
       if (inputData != null)
       {
         for (int i=0; i<inputData.length; i++)  //  for each line in inputData
@@ -91,14 +92,16 @@ void setup() {
         XML elevationElement = trackpoints[j].getChild("ele");
         float elevation = elevationElement.getFloatContent();
 
-        for (int k=0; k<=logLength; k++) //<>//
+        for (int k=0; k<=logLength; k++)
         {
-          TrackPoint theTrackPoint = trackLog.get(k);
+          TrackPoint theTrackPoint = null;
+          if (datafileExists)
+             theTrackPoint = trackLog.get(k);
 
-          if (time.compareTo(theTrackPoint.datetime) >= 0 ||
+          if (datafileExists && (time.compareTo(theTrackPoint.datetime) >= 0 ||
             (//logLength > 0 &&
             latitude  == theTrackPoint.latitude &&
-            longitude == theTrackPoint.longitude))
+            longitude == theTrackPoint.longitude)))
           {
             continue;
           }
