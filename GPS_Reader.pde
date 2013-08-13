@@ -1,13 +1,11 @@
 // GPS XML reader
 //   reads a .gpx XML file output from LoadMyTracks (http://www.loadmytracks.com/)
-// testing addition
 
 import processing.pdf.*;
 
 String[] inputData;   // holds the whole data file
 String[] dataLine;    // each line after split()
-//TrackPoint[] theTracklog = new TrackPoint[30]; // big enough to handle several 
-int logLength = 0;                                 // concatenated gps files
+int logLength = 0;
 
 float minLongitude = 999, maxLongitude = -999;
 float minLatitude = 999, maxLatitude = -999;
@@ -45,11 +43,11 @@ void setup() {
     trackLog = new ArrayList<TrackPoint>(10000);
 
     // read in previous data
-    File datafiletest = new File (dataPath("datafile"));
+    File datafiletest = new File (dataPath("datafile.txt"));
     Boolean datafileExists = datafiletest.exists();
     if (datafileExists)
     {
-      inputData = loadStrings("datafileout.txt");
+      inputData = loadStrings("datafile.txt");
       if (inputData != null)
       {
         for (int i=0; i<inputData.length; i++)  //  for each line in inputData
@@ -95,13 +93,12 @@ void setup() {
         for (int k=0; k<=logLength; k++)
         {
           TrackPoint theTrackPoint = null;
-          if (datafileExists)
+          if (logLength > 0)    //was if(datafileExists);
              theTrackPoint = trackLog.get(k);
 
-          if (datafileExists && (time.compareTo(theTrackPoint.datetime) >= 0 ||
-            (//logLength > 0 &&
-            latitude  == theTrackPoint.latitude &&
-            longitude == theTrackPoint.longitude)))
+          if (logLength > 0 && (time.compareTo(theTrackPoint.datetime) >= 0 ||
+            (latitude  == theTrackPoint.latitude &&
+             longitude == theTrackPoint.longitude)))
           {
             continue;
           }
