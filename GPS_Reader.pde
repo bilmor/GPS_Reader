@@ -1,5 +1,6 @@
 // GPS XML reader
 //   reads a .gpx XML file output from LoadMyTracks (http://www.loadmytracks.com/)
+// BROKEN -- ArrayList insertion isn't correct
 
 import processing.pdf.*;
 
@@ -17,13 +18,14 @@ String inputFilename = "FLAG";
 float lastX = 0;
 float lastY = 0;
 Boolean segFlag = false;
+String datafileIn = "datafile.txt";
 
 float screenAspect, geoAspect;
 float sideMargin, topMargin;
 
 XML gpxFile;
 
-PrintWriter datafile;
+PrintWriter datafileOut;
 ArrayList<TrackPoint> trackLog;
 
 void setup() {
@@ -43,11 +45,11 @@ void setup() {
     trackLog = new ArrayList<TrackPoint>(10000);
 
     // read in previous data
-    File datafiletest = new File (dataPath("datafile.txt"));
+    File datafiletest = new File (dataPath(datafileIn));
     Boolean datafileExists = datafiletest.exists();
     if (datafileExists)
     {
-      inputData = loadStrings("datafile.txt");
+      inputData = loadStrings(datafileIn);
       if (inputData != null)
       {
         for (int i=0; i<inputData.length; i++)  //  for each line in inputData
@@ -115,15 +117,15 @@ void setup() {
     }  // for i
 
     // write out the data file
-    datafile = createWriter("data/datafileout.txt");
+    datafileOut = createWriter("data/datafileout.txt");
     for (int i=0; i<trackLog.size(); i++)
     {
       TrackPoint temp = trackLog.get(i);
-      datafile.println(temp.datetime + "\t" + temp.latitude + "\t" + temp.longitude + 
+      datafileOut.println(temp.datetime + "\t" + temp.latitude + "\t" + temp.longitude + 
                        "\t" + temp.elevation + "\t" + temp.segment);
     }
-    datafile.flush();
-    datafile.close();
+    datafileOut.flush();
+    datafileOut.close();
 
       //  calculate maxima and minima
     for (int j=0; j<logLength; j++)
